@@ -15,7 +15,7 @@ function GameContextProvider({ children }) {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [taskAccepted, setTaskAccepted] = useState(false);
-  const [remainingTime, setRemainingTime] = useState();
+  const [remainingTime, setTHERemainingTime] = useState();
   const [selectedLevel, setSelectedLevel] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [timerId, setTimerId] = useState(null);
@@ -25,6 +25,11 @@ function GameContextProvider({ children }) {
   const [opacity, setOpacity] = useState(0);
   const [timerVisible, setTimerVisible] = useState(false);
   const [countdownVisible, setCountdownVisible] = useState(false);
+
+  const setRemainingTime = value => {
+    console.log(`setRemainingTime(${value})`);
+    setTHERemainingTime(value)
+  }
 
   const timer = () => {
     let duration;
@@ -60,6 +65,10 @@ function GameContextProvider({ children }) {
         setOpacity(1); // timer-end message is visible
       }
     }, 1000);
+
+
+
+    console.log("GameContext setInterval:", intervalId, duration);
 
     setTimerId(intervalId);
   };

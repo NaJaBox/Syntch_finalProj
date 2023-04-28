@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import atomOneDark from 'react-syntax-highlighter/dist/cjs/styles/hljs/atom-one-dark';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import prettier from 'prettier/standalone';
@@ -9,6 +9,8 @@ import Countdown from '../Logic/Countdown.js';
 import { GameContext } from '../Context/GameContext.jsx';
 import LevelSelector from 'gameSection/LevelSelector/LevelSelector.jsx';
 import './TaskSection.css';
+
+let render = 0
 
 const TaskSection = () => {
   const {
@@ -38,11 +40,21 @@ const TaskSection = () => {
     setCountdownVisible
   } = useContext(GameContext);
 
+  const snippetIsShowing = useRef()
+  snippetIsShowing.current = showSnippet
+
+  console.log("render:", ++render, ", snippetIsShowing.current:", snippetIsShowing.current);
+
+
   const handleAcceptClick = () => {
     setTaskAccepted(true);
     setShowSnippet(true);
     setCountdownVisible(true);
+
     setTimeout(() => {
+      if (!snippetIsShowing.current) {
+        return
+      }
       const codeWithBlanks = generateExercise(formattedCode, numBlanks);
       timer(); //function from GameContext
       setBlanks(codeWithBlanks); //task with input fields is displayed
@@ -64,6 +76,7 @@ const TaskSection = () => {
     resetTimer(); //timer is set to 0
     setTimerVisible(false);
     setOpacity(0); //timer-end message no longer visible
+    setCountdownVisible(false);
   };
 
   const handlePreviousClick = () => {
@@ -78,6 +91,7 @@ const TaskSection = () => {
     resetTimer();
     setTimerVisible(false);
     setOpacity(0);
+    setCountdownVisible(false);
   };
 
   const isPrevDisabled = currentTaskIndex === 0; //previous btn is disabled at index 0
