@@ -1,7 +1,9 @@
 /* eslint-disable */
 
 // function to add input fields to the code snippets
-export function generateExercise(text, numBlanks) {
+export function generateExercise(text, numBlanks, showSnippet, render) {
+  console.log("generate showSnippet:", showSnippet, render);
+  
   const parentElement = document.querySelector('.language-javascript');
   const spanElements = parentElement.querySelectorAll('span:not(:empty)');
   const selectedSpanIndices = [];

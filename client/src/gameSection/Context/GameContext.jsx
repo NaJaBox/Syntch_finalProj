@@ -7,7 +7,7 @@ export const GameContext = createContext(null);
 function GameContextProvider({ children }) {
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [currentTask, setCurrentTask] = useState(null);
-  const [showSnippet, setShowSnippet] = useState(false);
+  // const [showSnippet, setShowSnippet] = useState(false);
   const [data, setData] = useState(null);
   const [blanks, setBlanks] = useState('');
   const [exerciseGenerated, setExerciseGenerated] = useState(false);
@@ -25,6 +25,14 @@ function GameContextProvider({ children }) {
   const [opacity, setOpacity] = useState(0);
   const [timerVisible, setTimerVisible] = useState(false);
   const [countdownVisible, setCountdownVisible] = useState(false);
+
+  const [showSnippet, setTheShowSnippet] = useState(false);
+
+  const setShowSnippet = (value, render) => {
+    console.log("setShowSnippet:", value, render);
+    
+    setTheShowSnippet(value)
+  }
 
   const timer = () => {
     let duration;

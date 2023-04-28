@@ -10,13 +10,17 @@ import { GameContext } from '../Context/GameContext.jsx';
 import LevelSelector from 'gameSection/LevelSelector/LevelSelector.jsx';
 import './TaskSection.css';
 
+let render = 0
+
 const TaskSection = () => {
+  
+  let gameContext = useContext(GameContext);
+  let { showSnippet } = gameContext
   const {
     currentTaskIndex,
     setCurrentTaskIndex,
     currentTask,
     setCurrentTask,
-    showSnippet,
     setShowSnippet,
     data,
     setBlanks,
@@ -36,14 +40,25 @@ const TaskSection = () => {
     setTimerVisible,
     countdownVisible,
     setCountdownVisible
-  } = useContext(GameContext);
+  } = gameContext;
+
+  console.log("render:", ++render, ", showSnippet:", showSnippet );
+
 
   const handleAcceptClick = () => {
     setTaskAccepted(true);
-    setShowSnippet(true);
+    showSnippet = true;
+    setShowSnippet(showSnippet, render);
+    console.log("accept showSnippet:", showSnippet, render);
+    
     setCountdownVisible(true);
     setTimeout(() => {
-      const codeWithBlanks = generateExercise(formattedCode, numBlanks);
+      console.log("timeout showSnippet:", showSnippet, render);
+      
+      if (!showSnippet) {
+        return
+      }
+      const codeWithBlanks = generateExercise(formattedCode, numBlanks, showSnippet, render);
       timer(); //function from GameContext
       setBlanks(codeWithBlanks); //task with input fields is displayed
       setCountdownVisible(false);
@@ -59,11 +74,18 @@ const TaskSection = () => {
     setCurrentTask(data[selectedLevel][nextIndex][`task${nextIndex + 1}`]);
     setExerciseGenerated(false); //task with input field no longer visible
     setBlanks(''); //reset the input field to 0
-    setShowSnippet(false); //task snippet no longer visible
+    showSnippet = false
+    setShowSnippet(showSnippet, render); //task snippet no longer visible
+
+    console.log("next showSnippet:", showSnippet, render);
+
     setTaskAccepted(false); //accept btn is visible
     resetTimer(); //timer is set to 0
     setTimerVisible(false);
     setOpacity(0); //timer-end message no longer visible
+
+    
+    setCountdownVisible(false);
   };
 
   const handlePreviousClick = () => {
